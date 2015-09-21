@@ -3,17 +3,33 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Hexo</title>
+  <title>iOS审核的坑 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://yoursite.com/index.html">
+  <meta name="description" content="前言想把辛苦做出来的app在App store上线，那么审核这一关难以避免，现在苹果审核周期越来越长，基本要在等待审核 状态停留个10天才进入审核中，满心期待后又可能遇上苹果的奇葩拒绝理由，真是醉了，所以在这里想梳理下苹果拒绝的形式和各种理由。
+苹果拒绝理由的样式如果app被苹果拒绝，在后台的解决方案中心可以看到，一般拒绝的样式会分为三个部分；
+
+app违反了哪条苹果审核条例
+
+3.8 - Dev">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS审核的坑">
+<meta property="og:url" content="http://yoursite.com/2015/09/21/ios_commit/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description">
+<meta property="og:description" content="前言想把辛苦做出来的app在App store上线，那么审核这一关难以避免，现在苹果审核周期越来越长，基本要在等待审核 状态停留个10天才进入审核中，满心期待后又可能遇上苹果的奇葩拒绝理由，真是醉了，所以在这里想梳理下苹果拒绝的形式和各种理由。
+苹果拒绝理由的样式如果app被苹果拒绝，在后台的解决方案中心可以看到，一般拒绝的样式会分为三个部分；
+
+app违反了哪条苹果审核条例
+
+3.8 - Dev">
+<meta property="og:updated_time" content="2015-09-21T14:26:08.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo">
-<meta name="twitter:description">
+<meta name="twitter:title" content="iOS审核的坑">
+<meta name="twitter:description" content="前言想把辛苦做出来的app在App store上线，那么审核这一关难以避免，现在苹果审核周期越来越长，基本要在等待审核 状态停留个10天才进入审核中，满心期待后又可能遇上苹果的奇葩拒绝理由，真是醉了，所以在这里想梳理下苹果拒绝的形式和各种理由。
+苹果拒绝理由的样式如果app被苹果拒绝，在后台的解决方案中心可以看到，一般拒绝的样式会分为三个部分；
+
+app违反了哪条苹果审核条例
+
+3.8 - Dev">
   
     <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -59,9 +75,7 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-    <article id="post-ios_commit" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-ios_commit" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2015/09/21/ios_commit/" class="article-date">
   <time datetime="2015-09-21T14:26:08.000Z" itemprop="datePublished">2015-09-21</time>
@@ -74,8 +88,8 @@
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/09/21/ios_commit/">iOS审核的坑</a>
+    <h1 class="article-title" itemprop="name">
+      iOS审核的坑
     </h1>
   
 
@@ -170,104 +184,20 @@ Official rules <span class="keyword">for</span> sweepstakes <span class="operato
     </footer>
   </div>
   
-</article>
-
-
+    
+<nav id="article-nav">
   
-    <article id="post-day" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/09/21/day/" class="article-date">
-  <time datetime="2015-09-21T14:13:10.000Z" itemprop="datePublished">2015-09-21</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/09/21/day/">iOS简单问答</a>
-    </h1>
+    <a href="/2015/09/21/day/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">iOS简单问答</div>
+    </a>
   
+</nav>
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>1、什么时候添加和删除<code>notification</code>?</p>
-<p>答：<br>       根据最小权力原则，我们倾向于优先放在展示周期去监听事件。<br><code>ViewController</code>的展示周期是小于<code>ViewController</code>的生命周期的，所以一般如果能在展示周期完成的监听事件的需求，就不会放到生命周期中去做。除非展示周期搞不定的，才会把监听扩大到生命周期。</p>
-<p>2、如果一个<code>ViewController</code> 有很多的业务，视图也比较复杂，该怎么拆分呢？我想把业务的处理和页面跳转抽取出来，放到一个<code>category</code>里面，这样<code>viewController</code>可以减少很多代码，但是这个<code>category</code>貌似没有复用的价值。<br>另外，如果<code>UITableView</code>里面有很多不一样的<code>cell</code>，如何重构代码才能使<code>cell</code>的逻辑简化呢？我尝试用工厂模式去解决，但是发现每个<code>cell</code>需要的<code>model</code>参数都差不多，无法通过<code>model</code>去区分，而通过<code>indexPath</code>去区分的话又不方便重用，只能是一个页面适用。</p>
-<p>答：</p>
-<ol>
-<li><p>一般是按照业务角色来拆分业务模块，这需要你对业务有很好的抽象能力。首先，用<code>Category</code>来做对象功能拆分这个思路是没错的，但是对于拆分<code>ViewController</code>来说，拆分更加偏重的是对业务的抽象，然后设立角色，这样才能做到可复用，所以<code>category</code>的思路在这种场景下是不适用的。<code>category</code>只是把大对象变多个小对象而已，它适合拆分那种本身就已经抽象程度比较高、可复用性比较高的底层对象，而不适合用来拆分业务。</p>
-</li>
-<li><p>独立出<code>DataSource</code>成一个对象，<code>DataSource</code>事实上就可以理解为一个<code>factory</code>，然后<code>DataSource</code>根据<code>Controller</code>给的指示（通过设置<code>DataSource</code>属性也好，通过方法穿参数也行）去生产当前需要的<code>Cell</code></p>
-</li>
-</ol>
-<p>3、在模块化开发时，模块开发完。我们还需要一个入口工程，一般是<code>UITabBarController</code>。在这个入口工程里，在用户退出后，要如何刷新<code>UITabBarItem</code>对应的页面呢？目前我想到的有两种，一种是我重新创建<code>UITabBarController</code>，具体做法就是，当退出时，将<code>LoginViewController</code>切换<code>rootViewController</code>，如果登录成功后，再切换成<code>UITabBarController</code>为<code>rootViewController</code>.第二种方式，是登录页面使用模态方式显示（我看淘宝目前是这样处理的），退出登录时，抛退出登录的通知，让每个<code>TabbarItem</code>页面刷新。因为我们现在有个游客访问的功能，所以如果使用第一种切换<code>rootViewController</code>的方式，就会频繁创建释放<code>ViewController</code>，我不确定这样是否会有问题？而且我点击某个按钮弹出登录提示框后，去登录，如果登录成功后，就会显示首页而不是直接进入之前点击想进入的页面。如果使用第二种方式，抛通知，每个页面都处理这个通知，这样是否是好的方式？而且这里的通知处理还有特殊处理，因为刷新的页面如果有异常，这个时候不能弹出提示，否则就会在显示登录页面上弹出异常提示会很奇怪。</p>
-<p>答：<br>你的这种场合我还是建议抛通知，但是抛通知之后，只有当前正在展示的<code>viewcontroller</code>才刷新，其他<code>viewcontroller</code>收到通知后记录下状态，在<code>viewdidappea</code>r的时候再刷新。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/09/21/day/" data-id="cieu0yvmo0000grfy0xzfni6n" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
   
 </article>
 
-
-  
-    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/09/21/hello-world/" class="article-date">
-  <time datetime="2015-09-21T13:17:00.000Z" itemprop="datePublished">2015-09-21</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/09/21/hello-world/">Hello World</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Welcome to <a href="http://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="http://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="http://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick_Start">Quick Start</h2><h3 id="Create_a_new_post">Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run_server">Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate_static_files">Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy_to_remote_sites">Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/09/21/hello-world/" data-id="cieu0yvnm0002grfyrbx2pwom" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-  
 </section>
         
           <aside id="sidebar">
