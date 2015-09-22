@@ -65,110 +65,10 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-day" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/09/22/day/" class="article-date">
-  <time datetime="2015-09-22T02:46:17.000Z" itemprop="datePublished">2015-09-22</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/09/22/day/">iOS简单问答</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>1、什么时候添加和删除<code>notification</code>?</p>
-<p>答：<br>       根据最小权力原则，我们倾向于优先放在展示周期去监听事件。<br><code>ViewController</code>的展示周期是小于<code>ViewController</code>的生命周期的，所以一般如果能在展示周期完成的监听事件的需求，就不会放到生命周期中去做。除非展示周期搞不定的，才会把监听扩大到生命周期。</p>
-<p>2、如果一个<code>ViewController</code> 有很多的业务，视图也比较复杂，该怎么拆分呢？我想把业务的处理和页面跳转抽取出来，放到一个<code>category</code>里面，这样<code>viewController</code>可以减少很多代码，但是这个<code>category</code>貌似没有复用的价值。<br>另外，如果<code>UITableView</code>里面有很多不一样的<code>cell</code>，如何重构代码才能使<code>cell</code>的逻辑简化呢？我尝试用工厂模式去解决，但是发现每个<code>cell</code>需要的<code>model</code>参数都差不多，无法通过<code>model</code>去区分，而通过<code>indexPath</code>去区分的话又不方便重用，只能是一个页面适用。</p>
-<p>答：</p>
-<ul>
-<li><p>一般是按照业务角色来拆分业务模块，这需要你对业务有很好的抽象能力。首先，用<code>Category</code>来做对象功能拆分这个思路是没错的，但是对于拆分<code>ViewController</code>来说，拆分更加偏重的是对业务的抽象，然后设立角色，这样才能做到可复用，所以<code>category</code>的思路在这种场景下是不适用的。<code>category</code>只是把大对象变多个小对象而已，它适合拆分那种本身就已经抽象程度比较高、可复用性比较高的底层对象，而不适合用来拆分业务。</p>
-</li>
-<li><p>独立出<code>DataSource</code>成一个对象，<code>DataSource</code>事实上就可以理解为一个<code>factory</code>，然后<code>DataSource</code>根据<code>Controller</code>给的指示（通过设置<code>DataSource</code>属性也好，通过方法穿参数也行）去生产当前需要的<code>Cell</code></p>
-</li>
-</ul>
-<p>3、在模块化开发时，模块开发完。我们还需要一个入口工程，一般是<code>UITabBarController</code>。在这个入口工程里，在用户退出后，要如何刷新<code>UITabBarItem</code>对应的页面呢？目前我想到的有两种，一种是我重新创建<code>UITabBarController</code>，具体做法就是，当退出时，将<code>LoginViewController</code>切换<code>rootViewController</code>，如果登录成功后，再切换成<code>UITabBarController</code>为<code>rootViewController</code>.第二种方式，是登录页面使用模态方式显示（我看淘宝目前是这样处理的），退出登录时，抛退出登录的通知，让每个<code>TabbarItem</code>页面刷新。因为我们现在有个游客访问的功能，所以如果使用第一种切换<code>rootViewController</code>的方式，就会频繁创建释放<code>ViewController</code>，我不确定这样是否会有问题？而且我点击某个按钮弹出登录提示框后，去登录，如果登录成功后，就会显示首页而不是直接进入之前点击想进入的页面。如果使用第二种方式，抛通知，每个页面都处理这个通知，这样是否是好的方式？而且这里的通知处理还有特殊处理，因为刷新的页面如果有异常，这个时候不能弹出提示，否则就会在显示登录页面上弹出异常提示会很奇怪。</p>
-<p>答：<br>你的这种场合我还是建议抛通知，但是抛通知之后，只有当前正在展示的<code>viewcontroller</code>才刷新，其他<code>viewcontroller</code>收到通知后记录下状态，在<code>viewdidappea</code>r的时候再刷新。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/09/22/day/" data-id="cieurgwre00000q8mdn6ffwcx" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-ios9_qi_ye_fen_fa" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/09/22/ios9_qi_ye_fen_fa/" class="article-date">
-  <time datetime="2015-09-22T02:37:36.000Z" itemprop="datePublished">2015-09-22</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/09/22/ios9_qi_ye_fen_fa/">iOS9企业分发，下载不能安装解决方法</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>前不久手机刚刚升级到了iOS9，却发现企业分发不能用了，打开了手机系统log发现了如下报错：</p>
-<pre><code><span class="number">15</span>/<span class="number">9</span>/<span class="number">22</span> 上午<span class="number">9</span>:<span class="number">40</span>:<span class="number">18</span> itunesstored[<span class="number">1492</span>]: [ApplicationWorkspace]: Installing software package with bundleID: com.baby: bundleVersion: daily_1<span class="number">.5</span>_170917 path: /var/mobile/Media/Downloads/-<span class="number">6178650324167533062</span>/<span class="number">3405678580465728275</span>
-</code></pre><p>最主要的是：</p>
-<pre><code><span class="number">15</span>/<span class="number">9</span>/<span class="number">22</span> 上午<span class="number">9</span>:<span class="number">40</span>:<span class="number">19</span> itunesstored[<span class="number">1492</span>]: BundleValidator: Failed bundleIdentifier: com.xxx does not match expected bundleIdentifier: com.xxx.xxxx
-</code></pre><p>说明在企业分发写plist的时候<code>bundle-identifier</code>跟app的Bundle Identifier不一致，因为我们会分发不同的app，所以plist写的是通配符，现在貌似不行，修改成app的<code>Bundle Identifier</code>就可以了。</p>
-<p>同时，我还整理到企业分大app下载到一半不能完成安装的原因：</p>
-<ul>
-<li><p><strong>开发者在生成App安装包时，没有在Xcode中设置正确的Architecture。</strong>例如，如果在Xcode中的只添加了<code>arm64</code>这一种Architecture，那么最终打包后的ipa，对于iPad mini、iPhone5等以下设备，都是无法安装的（因为这些设备都不是arm64架构）。换句话说，如果需要在某个设备上可以安装，App就必须支持那个设备的<code>Architectur</code>e。所以，正确的解决方法是，在生成App安装包时，尽可能让App支持更多的Architecture。具体操作方法是：在<code>Xcode - Build Settings - Architecture</code>中，增加<code>armv7、armv7s、arm6</code>4，以便所有设备都可以安装。然后，将<code>&quot;Build active architecture only&quot;</code>设置为<code>NO</code>。对于各个iOS设备支持的Architecture类型。</p>
-</li>
-<li><p><strong>App支持的iOS系统版本，和当前设备系统版本不符。</strong> 例如，如果App设置了只支持7.0以上的iOS系统时，那么，如果在iOS6.1系统上安装，也是无法安装的。解决的方式是，让App尽可能支持更宽泛的系统版本。具体操作方式是：在<code>Xcode - General - Deployment Info - Deployment Target</code> 中，给App设置一个尽量低的版本，例如5.0。</p>
-</li>
-<li><p><strong>开发者上传的是一个破解的ipa安装包，或者是一个使用破解Xcode方式打包生成的ipa安装包，或者是通过iTunes生成的ipa安装包。</strong> 这样的安装包都是没有办法正确在’未越狱’的设备上安装的。正确的方法是，使用一个正常的苹果开发者证书（<code>个人证书</code>或<code>企业证书</code>均可），通过未破解的Xcode打包生成ipa安装包。</p>
-</li>
-<li><p><strong>设备上已经安装了这个App，且已经安装的App和要安装的App是用不同证书打包的。</strong>这种情况下，也会造成App安装失败。此时，开发者可以将设备上已经安装的App删除，再重新安装新的App。</p>
-</li>
-</ul>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/09/22/ios9_qi_ye_fen_fa/" data-id="cieurgws600020q8muzpd89ld" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
     <article id="post-ios_commit" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2015/09/21/ios_commit/" class="article-date">
-  <time datetime="2015-09-21T14:26:08.000Z" itemprop="datePublished">2015-09-21</time>
+    <a href="/2015/09/22/ios_commit/" class="article-date">
+  <time datetime="2015-09-22T03:16:32.000Z" itemprop="datePublished">2015-09-22</time>
 </a>
     
   </div>
@@ -179,7 +79,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2015/09/21/ios_commit/">iOS审核的坑</a>
+      <a class="article-title" href="/2015/09/22/ios_commit/">iOS审核的坑</a>
     </h1>
   
 
@@ -188,7 +88,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h2 id="前言">前言</h2><p>想把辛苦做出来的app在App store上线，那么审核这一关难以避免，现在苹果审核周期越来越长，基本要在<code>等待审核</code> 状态停留个10天才进入<code>审核中</code>，满心期待后又可能遇上苹果的奇葩拒绝理由，真是醉了，所以在这里想梳理下苹果拒绝的形式和各种理由。</p>
-<h2 id="苹果拒绝理由的样式">苹果拒绝理由的样式</h2><p>如果app被苹果拒绝，在后台的<code>解决方案中心</code>可以看到，一般拒绝的样式会分为三个部分；</p>
+<h2 id="苹果拒绝理由的样式">苹果拒绝理由的样式</h2><p>如果app被苹果拒绝，在后台的<code>解决方案中心</code>可以看到，一般拒绝的样式会分为三个部分：</p>
 <ul>
 <li>app违反了哪条苹果审核条例</li>
 </ul>
@@ -268,7 +168,107 @@ Official rules <span class="keyword">for</span> sweepstakes <span class="operato
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/09/21/ios_commit/" data-id="cieurgws400010q8mn8bv81el" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/09/22/ios_commit/" data-id="cieusitia00016d8m05zau2xa" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-day" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/09/22/day/" class="article-date">
+  <time datetime="2015-09-22T02:46:17.000Z" itemprop="datePublished">2015-09-22</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/09/22/day/">iOS简单问答</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>1、什么时候添加和删除<code>notification</code>?</p>
+<p>答：<br>       根据最小权力原则，我们倾向于优先放在展示周期去监听事件。<br><code>ViewController</code>的展示周期是小于<code>ViewController</code>的生命周期的，所以一般如果能在展示周期完成的监听事件的需求，就不会放到生命周期中去做。除非展示周期搞不定的，才会把监听扩大到生命周期。</p>
+<p>2、如果一个<code>ViewController</code> 有很多的业务，视图也比较复杂，该怎么拆分呢？我想把业务的处理和页面跳转抽取出来，放到一个<code>category</code>里面，这样<code>viewController</code>可以减少很多代码，但是这个<code>category</code>貌似没有复用的价值。<br>另外，如果<code>UITableView</code>里面有很多不一样的<code>cell</code>，如何重构代码才能使<code>cell</code>的逻辑简化呢？我尝试用工厂模式去解决，但是发现每个<code>cell</code>需要的<code>model</code>参数都差不多，无法通过<code>model</code>去区分，而通过<code>indexPath</code>去区分的话又不方便重用，只能是一个页面适用。</p>
+<p>答：</p>
+<ul>
+<li><p>一般是按照业务角色来拆分业务模块，这需要你对业务有很好的抽象能力。首先，用<code>Category</code>来做对象功能拆分这个思路是没错的，但是对于拆分<code>ViewController</code>来说，拆分更加偏重的是对业务的抽象，然后设立角色，这样才能做到可复用，所以<code>category</code>的思路在这种场景下是不适用的。<code>category</code>只是把大对象变多个小对象而已，它适合拆分那种本身就已经抽象程度比较高、可复用性比较高的底层对象，而不适合用来拆分业务。</p>
+</li>
+<li><p>独立出<code>DataSource</code>成一个对象，<code>DataSource</code>事实上就可以理解为一个<code>factory</code>，然后<code>DataSource</code>根据<code>Controller</code>给的指示（通过设置<code>DataSource</code>属性也好，通过方法穿参数也行）去生产当前需要的<code>Cell</code></p>
+</li>
+</ul>
+<p>3、在模块化开发时，模块开发完。我们还需要一个入口工程，一般是<code>UITabBarController</code>。在这个入口工程里，在用户退出后，要如何刷新<code>UITabBarItem</code>对应的页面呢？目前我想到的有两种，一种是我重新创建<code>UITabBarController</code>，具体做法就是，当退出时，将<code>LoginViewController</code>切换<code>rootViewController</code>，如果登录成功后，再切换成<code>UITabBarController</code>为<code>rootViewController</code>.第二种方式，是登录页面使用模态方式显示（我看淘宝目前是这样处理的），退出登录时，抛退出登录的通知，让每个<code>TabbarItem</code>页面刷新。因为我们现在有个游客访问的功能，所以如果使用第一种切换<code>rootViewController</code>的方式，就会频繁创建释放<code>ViewController</code>，我不确定这样是否会有问题？而且我点击某个按钮弹出登录提示框后，去登录，如果登录成功后，就会显示首页而不是直接进入之前点击想进入的页面。如果使用第二种方式，抛通知，每个页面都处理这个通知，这样是否是好的方式？而且这里的通知处理还有特殊处理，因为刷新的页面如果有异常，这个时候不能弹出提示，否则就会在显示登录页面上弹出异常提示会很奇怪。</p>
+<p>答：<br>你的这种场合我还是建议抛通知，但是抛通知之后，只有当前正在展示的<code>viewcontroller</code>才刷新，其他<code>viewcontroller</code>收到通知后记录下状态，在<code>viewdidappea</code>r的时候再刷新。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2015/09/22/day/" data-id="cieusithi00006d8m2p0dobni" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-ios9_qi_ye_fen_fa" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/09/22/ios9_qi_ye_fen_fa/" class="article-date">
+  <time datetime="2015-09-22T02:37:36.000Z" itemprop="datePublished">2015-09-22</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/09/22/ios9_qi_ye_fen_fa/">iOS9企业分发，下载不能安装解决方法</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>前不久手机刚刚升级到了iOS9，却发现企业分发不能用了，打开了手机系统log发现了如下报错：</p>
+<pre><code><span class="number">15</span>/<span class="number">9</span>/<span class="number">22</span> 上午<span class="number">9</span>:<span class="number">40</span>:<span class="number">18</span> itunesstored[<span class="number">1492</span>]: [ApplicationWorkspace]: Installing software package with bundleID: com.baby: bundleVersion: daily_1<span class="number">.5</span>_170917 path: /var/mobile/Media/Downloads/-<span class="number">6178650324167533062</span>/<span class="number">3405678580465728275</span>
+</code></pre><p>最主要的是：</p>
+<pre><code><span class="number">15</span>/<span class="number">9</span>/<span class="number">22</span> 上午<span class="number">9</span>:<span class="number">40</span>:<span class="number">19</span> itunesstored[<span class="number">1492</span>]: BundleValidator: Failed bundleIdentifier: com.xxx does not match expected bundleIdentifier: com.xxx.xxxx
+</code></pre><p>说明在企业分发写plist的时候<code>bundle-identifier</code>跟app的Bundle Identifier不一致，因为我们会分发不同的app，所以plist写的是通配符，现在貌似不行，修改成app的<code>Bundle Identifier</code>就可以了。</p>
+<p>同时，我还整理到企业分大app下载到一半不能完成安装的原因：</p>
+<ul>
+<li><p><strong>开发者在生成App安装包时，没有在Xcode中设置正确的Architecture。</strong>例如，如果在Xcode中的只添加了<code>arm64</code>这一种Architecture，那么最终打包后的ipa，对于iPad mini、iPhone5等以下设备，都是无法安装的（因为这些设备都不是arm64架构）。换句话说，如果需要在某个设备上可以安装，App就必须支持那个设备的<code>Architectur</code>e。所以，正确的解决方法是，在生成App安装包时，尽可能让App支持更多的Architecture。具体操作方法是：在<code>Xcode - Build Settings - Architecture</code>中，增加<code>armv7、armv7s、arm6</code>4，以便所有设备都可以安装。然后，将<code>&quot;Build active architecture only&quot;</code>设置为<code>NO</code>。对于各个iOS设备支持的Architecture类型。</p>
+</li>
+<li><p><strong>App支持的iOS系统版本，和当前设备系统版本不符。</strong> 例如，如果App设置了只支持7.0以上的iOS系统时，那么，如果在iOS6.1系统上安装，也是无法安装的。解决的方式是，让App尽可能支持更宽泛的系统版本。具体操作方式是：在<code>Xcode - General - Deployment Info - Deployment Target</code> 中，给App设置一个尽量低的版本，例如5.0。</p>
+</li>
+<li><p><strong>开发者上传的是一个破解的ipa安装包，或者是一个使用破解Xcode方式打包生成的ipa安装包，或者是通过iTunes生成的ipa安装包。</strong> 这样的安装包都是没有办法正确在’未越狱’的设备上安装的。正确的方法是，使用一个正常的苹果开发者证书（<code>个人证书</code>或<code>企业证书</code>均可），通过未破解的Xcode打包生成ipa安装包。</p>
+</li>
+<li><p><strong>设备上已经安装了这个App，且已经安装的App和要安装的App是用不同证书打包的。</strong>这种情况下，也会造成App安装失败。此时，开发者可以将设备上已经安装的App删除，再重新安装新的App。</p>
+</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2015/09/22/ios9_qi_ye_fen_fa/" data-id="cieusitic00026d8my53w2yxx" class="article-share-link">Share</a>
       
       
     </footer>
@@ -305,15 +305,15 @@ Official rules <span class="keyword">for</span> sweepstakes <span class="operato
       <ul>
         
           <li>
+            <a href="/2015/09/22/ios_commit/">iOS审核的坑</a>
+          </li>
+        
+          <li>
             <a href="/2015/09/22/day/">iOS简单问答</a>
           </li>
         
           <li>
             <a href="/2015/09/22/ios9_qi_ye_fen_fa/">iOS9企业分发，下载不能安装解决方法</a>
-          </li>
-        
-          <li>
-            <a href="/2015/09/21/ios_commit/">iOS审核的坑</a>
           </li>
         
       </ul>
