@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>ReactiveCocoa实现验证码倒计时 | Bobby&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="有时候需要时间验证吗倒计时，以前在没有使用rac的时候我是这么写的：
+ __block int timeout = [time intValue];
+dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+dispatch_source_t _timer = dispatch_s">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ReactiveCocoa实现验证码倒计时">
+<meta property="og:url" content="http://yoursite.com/2015/09/23/RactiveCocoa实现验证码倒计时/index.html">
+<meta property="og:site_name" content="Bobby's blog">
+<meta property="og:description" content="有时候需要时间验证吗倒计时，以前在没有使用rac的时候我是这么写的：
+ __block int timeout = [time intValue];
+dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+dispatch_source_t _timer = dispatch_s">
+<meta property="og:updated_time" content="2015-09-23T11:52:58.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ReactiveCocoa实现验证码倒计时">
+<meta name="twitter:description" content="有时候需要时间验证吗倒计时，以前在没有使用rac的时候我是这么写的：
+ __block int timeout = [time intValue];
+dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+dispatch_source_t _timer = dispatch_s">
+  
+    <link rel="alternative" href="/atom.xml" title="Bobby&#39;s blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Bobby&#39;s blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">Walk stpes setp by setp, for my Jin</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-RactiveCocoa实现验证码倒计时" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/09/23/RactiveCocoa实现验证码倒计时/" class="article-date">
+  <time datetime="2015-09-23T11:25:38.000Z" itemprop="datePublished">2015-09-23</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      ReactiveCocoa实现验证码倒计时
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>有时候需要时间验证吗倒计时，以前在没有使用<code>rac</code>的时候我是这么写的：</p>
+<pre><code> __block <span class="keyword">int</span> timeout = [time intValue];
+<span class="built_in">dispatch_queue_t</span> queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, <span class="number">0</span>);
+dispatch_source_t _timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, <span class="number">0</span>, <span class="number">0</span>,queue);
+dispatch_source_set_timer(_timer,dispatch_walltime(<span class="literal">NULL</span>, <span class="number">0</span>),<span class="number">1.0</span>*<span class="built_in">NSEC_PER_SEC</span>, <span class="number">0</span>);
+dispatch_source_set_event_handler(_timer, ^{
+    <span class="keyword">if</span>(timeout&lt;=<span class="number">0</span>){
+        dispatch_source_cancel(_timer);
+        <span class="built_in">dispatch_async</span>(dispatch_get_main_queue(), ^{
+            <span class="comment">// 倒计时完成</span>
+            [<span class="keyword">self</span><span class="variable">.codeButton</span> setTitle:<span class="string">@"获取验证码"</span> forState:<span class="built_in">UIControlStateNormal</span>];
+            <span class="keyword">self</span><span class="variable">.codeButton</span><span class="variable">.enabled</span> = <span class="literal">YES</span>;
+        });
+    }<span class="keyword">else</span>{
+        <span class="keyword">int</span> seconds = timeout;
+        <span class="built_in">NSString</span> *strTime = [<span class="built_in">NSString</span> stringWithFormat:<span class="string">@"%.2d"</span>, seconds];
+        <span class="built_in">dispatch_async</span>(dispatch_get_main_queue(), ^{
+           <span class="comment">// 更新button上的倒计时</span>
+             [<span class="keyword">self</span><span class="variable">.codeButton</span> setTitle:[<span class="built_in">NSString</span> stringWithFormat:<span class="string">@"%@秒后重新获取"</span>,strTime] forState:<span class="built_in">UIControlStateNormal</span>];
+           <span class="keyword">self</span><span class="variable">.codeButton</span><span class="variable">.enabled</span> = <span class="literal">NO</span>;
+        });
+        timeout--;
+    }
+});
+dispatch_resume(_timer);
+</code></pre><p>用GCD这么写比较蛋疼，更好的办法，肯定有的，但是因为项目的原因没有再研究，直到用到了<code>ReactiveCocoa</code>后，我不由得思考，如何更简单的实现这个功能：</p>
+<ul>
+<li>将倒计时本身给抽取出来；</li>
+<li><p>将按钮的<code>enabled</code>给独立出来；</p>
+<pre><code><span class="annotation">@weakify</span>(self);
+<span class="keyword">static</span> NSInteger number = <span class="number">0</span>;
+RACSignal *timerSignal = [[[RACSignal <span class="string">interval:</span><span class="number">1.0</span>f <span class="string">onScheduler:</span>[RACScheduler mainThreadScheduler]] <span class="string">map:</span>^id(NSDate *date){
+    <span class="annotation">@strongify</span>(self);
+    <span class="keyword">if</span> (--number &lt;= <span class="number">0</span>) {
+        [self.codeButton <span class="string">setTitle:</span>@<span class="string">"获取验证码"</span> <span class="string">forState:</span>UIControlStateNormal];
+        <span class="keyword">return</span> <span class="annotation">@YES</span>;
+    }<span class="keyword">else</span>{
+        [self.codeButton <span class="string">setTitle:</span>[NSString <span class="string">stringWithFormat:</span>@<span class="string">"%d秒后可重新获取"</span>, (<span class="typename">int</span>)number] <span class="string">forState:</span>UIControlStateNormal];
+        <span class="keyword">return</span> <span class="annotation">@NO</span>;
+    }
+}] <span class="string">takeUntilBlock:</span>^BOOL(id x){
+    <span class="keyword">return</span> number &lt;= <span class="number">0</span>;
+}];
+
+<span class="comment">// 验证码点击</span>
+self.regView.codeButton.rac_command = [[RACCommand alloc]<span class="string">initWithSignalBlock:</span>^RACSignal *(id input) {
+    number = kCountDownSeconds;
+    <span class="keyword">return</span> timerSignal;
+}];
+</code></pre></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2015/09/23/RactiveCocoa实现验证码倒计时/" data-id="ciewp1a1r0000ip8m2foxqcxg" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Rac/">Rac</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2015/09/22/ios_commit/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">iOS审核的坑</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Rac/">Rac</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Rac/" style="font-size: 10px;">Rac</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">4</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2015/09/23/RactiveCocoa实现验证码倒计时/">ReactiveCocoa实现验证码倒计时</a>
+          </li>
+        
+          <li>
+            <a href="/2015/09/22/ios_commit/">iOS审核的坑</a>
+          </li>
+        
+          <li>
+            <a href="/2015/09/22/day/">iOS简单问答</a>
+          </li>
+        
+          <li>
+            <a href="/2015/09/22/ios9_qi_ye_fen_fa/">iOS9企业分发，下载不能安装解决方法</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2015 Bobby<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="/js/jquery-2.0.3.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
+
+
+<script src="/js/script.js" type="text/javascript"></script>
+
+  </div>
+</body>
+</html>
